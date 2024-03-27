@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "uil-mscs-scraper"
+version = "0.1.0"
+description = "A scraper for math, science, and computer science official results from the UIL Academics website."
+authors = ["Eridani Alcantar <ealcantar@utexas.edu>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+requests = "^2.31.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
