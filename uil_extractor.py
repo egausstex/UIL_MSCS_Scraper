@@ -16,14 +16,17 @@ class UILExtractor:
 
         soup = BeautifulSoup(self.scraper.html, "html.parser")
         # Find first table and get all table rows
-        for tr in soup.table.findAll("tr"):
+        for index, tr in enumerate(soup.table.findAll("tr")):
             row = []
             # Find all table data cells
             for td in tr.findAll("td"):
                 # Convert object to string and strip whitespace characters
                 data_string = str(td.string).strip()
                 row.append(data_string)
-            self.data.append(row)
+            if index == 0:
+                self.data.append(row + ["Year", "Event"])
+            else:
+                self.data.append(row + [self.scraper.year, self.scraper.event])
 
     def write_csv(self, filepath: str) -> None:
         """Write extracted data into a csv file"""
