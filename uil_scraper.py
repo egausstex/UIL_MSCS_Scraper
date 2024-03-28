@@ -31,7 +31,7 @@ class UILScraper:
         ).text
 
     def write_html(self, filepath: str) -> None:
-        """Write the self.results request object to an html file."""
+        """Write the self.html object to an html file."""
         # Write html page into a text file
         with open(filepath, "w") as text_file:
             text_file.write(self.html)
