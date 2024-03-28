@@ -1,4 +1,5 @@
 from html.parser import HTMLParser
+from uil_scraper import UILScraper
 from bs4 import BeautifulSoup
 import csv
 
@@ -6,14 +7,14 @@ import csv
 class UILExtractor:
     """Create a UILExtractor class"""
 
-    def __init__(self, UILScraper) -> None:
-        self.raw_data = UILScraper
+    def __init__(self, scraper: UILScraper) -> None:
+        self.scraper = scraper
         self.data = []
 
     def extract_individual_results(self):
         """Extract individual contestant results from HTML file"""
 
-        soup = BeautifulSoup(self.raw_data, "html.parser")
+        soup = BeautifulSoup(self.scraper.html, "html.parser")
         # Find first table and get all table rows
         for tr in soup.table.findAll("tr"):
             row = []
