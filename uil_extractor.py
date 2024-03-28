@@ -9,11 +9,11 @@ class UILExtractor:
 
     def __init__(self, scraper: UILScraper) -> None:
         self.scraper = scraper
-        self.data = []
+        self.data = {"header": None, "rows": None}
 
     def extract_individual_results(self):
+        self.data["rows"] = []
         """Extract individual contestant results from HTML file"""
-
         soup = BeautifulSoup(self.scraper.html, "html.parser")
         # Find first table and get all table rows
         for index, tr in enumerate(soup.table.findAll("tr")):
@@ -24,9 +24,9 @@ class UILExtractor:
                 data_string = str(td.string).strip()
                 row.append(data_string)
             if index == 0:
-                self.data.append(row + ["Year", "Event"])
+                self.data["header"] = row + ["Year", "Event"]
             else:
-                self.data.append(row + [self.scraper.year, self.scraper.event])
+                self.data["rows"].append(row + [self.scraper.year, self.scraper.event])
 
     def write_csv(self, filepath: str) -> None:
         """Write extracted data into a csv file"""
