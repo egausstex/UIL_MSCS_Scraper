@@ -26,7 +26,7 @@ class UILScraper:
         }
 
         # Requests object
-        self.results = requests.get(
+        self.html = requests.get(
             "https://utdirect.utexas.edu/nlogon/uil/vlcp_pub_arch.WBX", params=payload
         ).text
 
@@ -34,4 +34,4 @@ class UILScraper:
         """Write the self.results request object to an html file."""
         # Write html page into a text file
         with open(filepath, "w") as text_file:
-            text_file.write(self.results)
+            text_file.write(self.html)
