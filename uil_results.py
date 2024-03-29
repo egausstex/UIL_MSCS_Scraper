@@ -1,10 +1,51 @@
 import csv
+from uil_scraper import UILScraper
+from uil_extractor import UILExtractor
 
 
 class UILResults:
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        contest: str,
+        conference: str,
+        meet_level: str,
+        meet_div: int,
+        year_start: int,
+        year_end: int = None,
+    ) -> None:
+        self.contest = contest
+        self.conference = conference
+        self.meet_level = meet_level
+        self.meet_div = meet_div
+        self.year_start = year_start
+        self.year_end = year_end
         self.header = []
         self.rows = []
+
+    def agg_data(self):
+        if self.year_end:
+            for year in range(self.year_start, self.year_end + 1):
+                self.get_data(
+                    year, self.conference, self.meet_level, self.meet_div, self.contest
+                )
+        else:
+            self.get_data(
+                self.year_start,
+                self.conference,
+                self.meet_level,
+                self.meet_div,
+                self.contest,
+            )
+
+    def get_data(self, year: int, conference, meet_level, meet_div, contest):
+        scraper = UILScraper(
+            year, self.conference, self.meet_level, self.meet_div, self.contest
+        )
+        scraper.get_html()
+        extractor = UILExtractor(scraper)
+        extractor.extract_individual_results()
+        self.set_header(extractor.data["header"])
+        self.add_rows(extractor.data["rows"])
 
     def set_header(self, header: list):
         if self.header != header:
