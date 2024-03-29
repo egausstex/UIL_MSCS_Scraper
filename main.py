@@ -1,10 +1,13 @@
-from uil_scraper import UILScraper
-from uil_extractor import UILExtractor
+from uil_results import UILResults
 
-uil_scraper = UILScraper(2022, "5A", "R", 3, "CAL")
-uil_scraper.get_html()
-uil_scraper.write_html("response.html")
+contest = "CAL"
+conference = "5A"
+meet_level = "R"
+meet_div = 3
+year_start = 2017
+year_end = 2019
 
-uil_extractor = UILExtractor(uil_scraper)
-uil_extractor.extract_individual_results()
-uil_extractor.write_csv("results.csv")
+results = UILResults(contest, conference, meet_level, meet_div, year_start, year_end)
+results.agg_data()
+results.print_results()
+results.write_csv("results.csv")
