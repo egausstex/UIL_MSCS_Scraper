@@ -8,14 +8,14 @@ class UILResults:
         self,
         contests: str | list,
         conferences: str | list,
-        meet_level: str,
-        meet_div: int,
+        meet_levels: str,
+        meet_level_nums: dict,
         years: int | list,
     ) -> None:
         self.contests = contests
         self.conferences = conferences
-        self.meet_level = meet_level
-        self.meet_div = meet_div
+        self.meet_levels = meet_levels
+        self.meet_level_nums = meet_level_nums
         self.years = years
         self.header = []
         self.rows = []
@@ -28,7 +28,24 @@ class UILResults:
         for year in self.year_range:
             for conference in self.conferences:
                 for contest in self.contests:
-                    self.get_data(year, conference, contest)
+                    for meet_level in self.meet_levels:
+                        # Check if meet_level is "S"
+                        if meet_level == "D":
+                            for num in self.meet_level_nums["D"]:
+                                print(meet_level, num)
+                                self.get_data(
+                                    year, conference, contest, meet_level, num
+                                )
+                        elif meet_level == "R":
+                            for num in self.meet_level_nums["R"]:
+                                print(meet_level, num)
+                                self.get_data(
+                                    year, conference, contest, meet_level, num
+                                )
+                        elif meet_level == "S":
+                            num = 1
+                            self.get_data(year, conference, contest, meet_level, num)
+                            print("You're state!")
 
     def create_year_range(self) -> None:
         """Creates a list with the year(s) to scrape the UIL website."""
@@ -49,12 +66,23 @@ class UILResults:
             self.conferences = [self.conferences]
         if type(self.contests) == str:
             self.contests = [self.contests]
+        if type(self.meet_level_nums) == dict:
+            for key, value in self.meet_level_nums.items():
+                if type(self.meet_level_nums[key]) == int:
+                    self.meet_level_nums[key] = [value]
 
-    def get_data(self, year: int, conference: str, contest: str):
+    def get_data(
+        self,
+        year: int,
+        conference: str,
+        contest: str,
+        meet_level: str,
+        meet_level_num: str,
+    ):
         print(
-            f"Scraping {year}, {conference}, {contest}, {self.meet_level}, {self.meet_div}"
+            f"Scraping {year}, {conference}, {contest}, {meet_level}, {meet_level_num}"
         )
-        scraper = UILScraper(year, conference, self.meet_level, self.meet_div, contest)
+        scraper = UILScraper(year, conference, meet_level, meet_level_num, contest)
         scraper.get_html()
         extractor = UILExtractor(scraper)
         extractor.extract_individual_results()

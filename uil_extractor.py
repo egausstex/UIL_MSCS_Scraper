@@ -27,6 +27,7 @@ class UILExtractor:
                 # Use list comprehension to apply .lower to each column name
                 self.data["header"] = [item.lower() for item in row] + [
                     "meet_level",
+                    "level_num",
                     "year",
                     "event",
                     "conference",
@@ -36,6 +37,7 @@ class UILExtractor:
                     row
                     + [
                         self.scraper.meet_level,
+                        self.scraper.level_num,
                         self.scraper.year,
                         self.scraper.event,
                         self.scraper.conference,
