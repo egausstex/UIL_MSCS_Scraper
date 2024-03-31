@@ -7,13 +7,13 @@ class UILResults:
     def __init__(
         self,
         contest: str,
-        conference: str,
+        conferences: str | list,
         meet_level: str,
         meet_div: int,
         years: int | list,
     ) -> None:
         self.contest = contest
-        self.conference = conference
+        self.conferences = conferences
         self.meet_level = meet_level
         self.meet_div = meet_div
         self.years = years
@@ -23,9 +23,11 @@ class UILResults:
 
     def agg_data(self):
         self.create_year_range()
+        self.create_conference_range()
 
         for year in self.year_range:
-            self.get_data(year)
+            for conference in self.conferences:
+                self.get_data(year, conference)
 
     def create_year_range(self) -> None:
         """Creates a list with the year(s) to scrape the UIL website."""
@@ -41,9 +43,16 @@ class UILResults:
             print("Invalid input.")
         print(self.year_range)
 
-    def get_data(self, year: int):
+    def create_conference_range(self) -> None:
+        if type(self.conferences) == str:
+            self.conferences = [self.conferences]
+
+    def get_data(self, year: int, conference: str):
+        print(
+            f"Scraping {year}, {conference}, {self.meet_level}, {self.meet_div}, {self.contest}"
+        )
         scraper = UILScraper(
-            year, self.conference, self.meet_level, self.meet_div, self.contest
+            year, conference, self.meet_level, self.meet_div, self.contest
         )
         scraper.get_html()
         extractor = UILExtractor(scraper)
