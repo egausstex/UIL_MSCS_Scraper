@@ -1,7 +1,7 @@
 from uil_results import UILResults
 
 contest = "CAL"
-conference = "5A"
+conference = ["5A", "6A"]
 meet_level = "R"
 meet_div = 3
 years = [2017, 2019]

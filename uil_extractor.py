@@ -29,11 +29,17 @@ class UILExtractor:
                     "meet_level",
                     "year",
                     "event",
+                    "conference",
                 ]
             else:
                 self.data["rows"].append(
                     row
-                    + [self.scraper.meet_level, self.scraper.year, self.scraper.event]
+                    + [
+                        self.scraper.meet_level,
+                        self.scraper.year,
+                        self.scraper.event,
+                        self.scraper.conference,
+                    ]
                 )
 
     def write_csv(self, filepath: str) -> None:
