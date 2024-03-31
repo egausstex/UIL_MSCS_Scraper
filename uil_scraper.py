@@ -5,11 +5,11 @@ class UILScraper:
     """Create a UILScraper class"""
 
     def __init__(
-        self, year: int, conference: str, level: str, level_num: int, event: str
+        self, year: int, conference: str, meet_level: str, level_num: int, event: str
     ) -> None:
         self.year = year
         self.conference = conference
-        self.level = level
+        self.meet_level = meet_level
         self.level_num = level_num
         self.event = event
 
@@ -19,7 +19,7 @@ class UILScraper:
         payload = {
             "s_year": str(self.year),
             "s_conference": self.conference,
-            "s_level_id": self.level,
+            "s_level_id": self.meet_level,
             "s_level_nbr": str(self.level_num),
             "s_event_abbr": self.event,
             "s_submit_sw": "X",
