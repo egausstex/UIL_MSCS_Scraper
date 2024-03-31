@@ -24,9 +24,17 @@ class UILExtractor:
                 data_string = str(td.string).strip()
                 row.append(data_string)
             if index == 0:
-                self.data["header"] = row + ["Year", "Event"]
+                # Use list comprehension to apply .lower to each column name
+                self.data["header"] = [item.lower() for item in row] + [
+                    "meet_level",
+                    "year",
+                    "event",
+                ]
             else:
-                self.data["rows"].append(row + [self.scraper.year, self.scraper.event])
+                self.data["rows"].append(
+                    row
+                    + [self.scraper.meet_level, self.scraper.year, self.scraper.event]
+                )
 
     def write_csv(self, filepath: str) -> None:
         """Write extracted data into a csv file"""

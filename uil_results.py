@@ -10,34 +10,38 @@ class UILResults:
         conference: str,
         meet_level: str,
         meet_div: int,
-        year_start: int,
-        year_end: int = None,
+        years: int | list,
     ) -> None:
         self.contest = contest
         self.conference = conference
         self.meet_level = meet_level
         self.meet_div = meet_div
-        self.year_start = year_start
-        self.year_end = year_end
+        self.years = years
         self.header = []
         self.rows = []
+        self.year_range = None
 
     def agg_data(self):
-        if self.year_end:
-            for year in range(self.year_start, self.year_end + 1):
-                self.get_data(
-                    year, self.conference, self.meet_level, self.meet_div, self.contest
-                )
-        else:
-            self.get_data(
-                self.year_start,
-                self.conference,
-                self.meet_level,
-                self.meet_div,
-                self.contest,
-            )
+        self.create_year_range()
 
-    def get_data(self, year: int, conference, meet_level, meet_div, contest):
+        for year in self.year_range:
+            self.get_data(year)
+
+    def create_year_range(self) -> None:
+        """Creates a list with the year(s) to scrape the UIL website."""
+        if type(self.years) == int:
+            print("You have specified a single year")
+            self.year_range = [self.years]
+        elif type(self.years) == list and len(self.years) == 2:
+            print(
+                f"You have specified a range of years {self.years[0]} to {self.years[1]}"
+            )
+            self.year_range = list(range(self.years[0], self.years[1] + 1))
+        else:
+            print("Invalid input.")
+        print(self.year_range)
+
+    def get_data(self, year: int):
         scraper = UILScraper(
             year, self.conference, self.meet_level, self.meet_div, self.contest
         )
