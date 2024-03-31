@@ -6,13 +6,13 @@ from uil_extractor import UILExtractor
 class UILResults:
     def __init__(
         self,
-        contest: str,
+        contests: str | list,
         conferences: str | list,
         meet_level: str,
         meet_div: int,
         years: int | list,
     ) -> None:
-        self.contest = contest
+        self.contests = contests
         self.conferences = conferences
         self.meet_level = meet_level
         self.meet_div = meet_div
@@ -23,11 +23,12 @@ class UILResults:
 
     def agg_data(self):
         self.create_year_range()
-        self.create_conference_range()
+        self.create_param_range()
 
         for year in self.year_range:
             for conference in self.conferences:
-                self.get_data(year, conference)
+                for contest in self.contests:
+                    self.get_data(year, conference, contest)
 
     def create_year_range(self) -> None:
         """Creates a list with the year(s) to scrape the UIL website."""
@@ -43,17 +44,17 @@ class UILResults:
             print("Invalid input.")
         print(self.year_range)
 
-    def create_conference_range(self) -> None:
+    def create_param_range(self) -> None:
         if type(self.conferences) == str:
             self.conferences = [self.conferences]
+        if type(self.contests) == str:
+            self.contests = [self.contests]
 
-    def get_data(self, year: int, conference: str):
+    def get_data(self, year: int, conference: str, contest: str):
         print(
-            f"Scraping {year}, {conference}, {self.meet_level}, {self.meet_div}, {self.contest}"
+            f"Scraping {year}, {conference}, {contest}, {self.meet_level}, {self.meet_div}"
         )
-        scraper = UILScraper(
-            year, conference, self.meet_level, self.meet_div, self.contest
-        )
+        scraper = UILScraper(year, conference, self.meet_level, self.meet_div, contest)
         scraper.get_html()
         extractor = UILExtractor(scraper)
         extractor.extract_individual_results()
