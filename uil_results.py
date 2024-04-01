@@ -31,7 +31,6 @@ class UILResults:
                         # Check if meet_level is "S"
                         if meet_level == "D":
                             for num in self.meet_level_nums["D"]:
-                                print(meet_level, num)
                                 self.get_data(
                                     year, conference, contest, meet_level, num
                                 )
@@ -80,7 +79,7 @@ class UILResults:
         scraper = UILScraper(year, conference, meet_level, meet_level_num, contest)
         scraper.get_html()
         extractor = UILExtractor(scraper)
-        extractor.extract_individual_results(meet_level)
+        extractor.extract_individual_results()
         self.set_header(extractor.data["header"])
         self.add_rows(extractor.data["rows"])
 
