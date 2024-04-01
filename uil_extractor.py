@@ -9,9 +9,25 @@ class UILExtractor:
 
     def __init__(self, scraper: UILScraper) -> None:
         self.scraper = scraper
-        self.data = {"header": None, "rows": None}
+        self.data = {
+            "header": [
+                "contestant",
+                "school",
+                "score",
+                "place",
+                "points",
+                "medal",
+                "advance",
+                "meet_level",
+                "level_num",
+                "year",
+                "event",
+                "conference",
+            ],
+            "rows": None,
+        }
 
-    def extract_individual_results(self):
+    def extract_individual_results(self, meet_level: str):
         self.data["rows"] = []
         """Extract individual contestant results from HTML file"""
         soup = BeautifulSoup(self.scraper.html, "html.parser")
@@ -23,16 +39,10 @@ class UILExtractor:
                 # Convert object to string and strip whitespace characters
                 data_string = str(td.string).strip()
                 row.append(data_string)
-            if index == 0:
-                # Use list comprehension to apply .lower to each column name
-                self.data["header"] = [item.lower() for item in row] + [
-                    "meet_level",
-                    "level_num",
-                    "year",
-                    "event",
-                    "conference",
-                ]
-            else:
+            if index != 0:
+                # Add extra element if results are from state
+                if meet_level == "S":
+                    row.insert(6, "")
                 self.data["rows"].append(
                     row
                     + [

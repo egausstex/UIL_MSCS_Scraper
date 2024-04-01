@@ -19,13 +19,12 @@ class UILResults:
         self.years = years
         self.header = []
         self.rows = []
-        self.year_range = None
 
     def agg_data(self):
         self.create_year_range()
         self.create_param_range()
 
-        for year in self.year_range:
+        for year in self.years:
             for conference in self.conferences:
                 for contest in self.contests:
                     for meet_level in self.meet_levels:
@@ -38,28 +37,22 @@ class UILResults:
                                 )
                         elif meet_level == "R":
                             for num in self.meet_level_nums["R"]:
-                                print(meet_level, num)
                                 self.get_data(
                                     year, conference, contest, meet_level, num
                                 )
                         elif meet_level == "S":
                             num = 1
                             self.get_data(year, conference, contest, meet_level, num)
-                            print("You're state!")
 
     def create_year_range(self) -> None:
         """Creates a list with the year(s) to scrape the UIL website."""
         if type(self.years) == int:
             print("You have specified a single year")
-            self.year_range = [self.years]
-        elif type(self.years) == list and len(self.years) == 2:
-            print(
-                f"You have specified a range of years {self.years[0]} to {self.years[1]}"
-            )
-            self.year_range = list(range(self.years[0], self.years[1] + 1))
+            self.years = [self.years]
+        elif type(self.years) == list:
+            print("You have given a list of years")
         else:
             print("Invalid input.")
-        print(self.year_range)
 
     def create_param_range(self) -> None:
         if type(self.conferences) == str:
@@ -70,6 +63,8 @@ class UILResults:
             for key, value in self.meet_level_nums.items():
                 if type(self.meet_level_nums[key]) == int:
                     self.meet_level_nums[key] = [value]
+        else:
+            print("Invalid input for meet_level_nums.")
 
     def get_data(
         self,
@@ -85,7 +80,7 @@ class UILResults:
         scraper = UILScraper(year, conference, meet_level, meet_level_num, contest)
         scraper.get_html()
         extractor = UILExtractor(scraper)
-        extractor.extract_individual_results()
+        extractor.extract_individual_results(meet_level)
         self.set_header(extractor.data["header"])
         self.add_rows(extractor.data["rows"])
 
@@ -93,8 +88,8 @@ class UILResults:
         if self.header != header:
             print(f"Different headers, overwriting with {header}...")
             self.header = header
-        else:
-            print("Headers are the same.")
+        # else:
+        #     print("Headers are the same.")
 
     def add_rows(self, rows: list):
         self.rows += rows
