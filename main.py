@@ -1,10 +1,10 @@
 from uil_results import UILResults
 
-years = [i for i in range(2005, 2023)]
+years = [i for i in range(2020, 2023)]
 contest = ["NUM", "CAL", "MTH", "CSC"]
-conference = ["1A", "2A", "3A", "4A", "5A"]
+conference = ["1A", "2A", "3A", "4A", "5A", "6A"]
 meet_level = ["D", "R", "S"]
-district_nums = [i for i in range(1, 35)]
+district_nums = [i for i in range(1, 33)]
 meet_level_num = {"R": [1, 2, 3, 4], "D": district_nums}
 
 for year in years:
